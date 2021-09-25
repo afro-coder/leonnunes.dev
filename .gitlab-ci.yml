@@ -25,7 +25,7 @@ deploy:
     - chmod og=  $PK_KEY
     - apk update && apk add openssh-client
     - eval $(ssh-agent -s)
-    - echo ${PK_KEY} | ssh-add -
+    - cat ${PK_KEY} |tr -d '\r' | ssh-add -
     - ssh -vvvvv -i $PK_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman pull $TAG_COMMIT"
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman container rm -f my-app || true"
