@@ -24,10 +24,12 @@ deploy:
   script:
     - chmod og=  $PK_KEY
     - apk update && apk add openssh-client
+    - eval $(ssh-agent -s)
+    - echo ${PK_KEY} | ssh-add -
     - ssh -vvvvv -i $PK_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
-    - ssh -i $PK_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman pull $TAG_COMMIT"
-    - ssh -i $PK_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman container rm -f my-app || true"
-    - ssh -i $PK_KEY -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman run -d -p 80:80 --name my-app $TAG_COMMIT"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman pull $TAG_COMMIT"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman container rm -f my-app || true"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman run -d -p 80:80 --name my-app $TAG_COMMIT"
   environment:
     name: production
     url: https://portfolio.afro-coder.com/
