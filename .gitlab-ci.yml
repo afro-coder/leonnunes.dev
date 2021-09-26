@@ -26,14 +26,14 @@ deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - eval $(ssh-agent -s)
-    - echo "${PK_KEY}" |tr -d '\r' | ssh-add -
+    - echo "${PK_KEY}" |tr -d '\r' | ssh-add - 
     - ssh-keyscan $SERVER_IP
 
   script:
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman pull $TAG_COMMIT"
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman container rm -f my-app || true"
-    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman run -d -p 80:80 --name my-app $TAG_COMMIT"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman container rm -f $WEB_NAME || true"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman run -d -p 8080:80 --name $WEB_NAME $TAG_COMMIT"
   environment:
     name: production
     url: https://portfolio.afro-coder.com/
