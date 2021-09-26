@@ -24,6 +24,7 @@ deploy:
   before_script:
     - apk update && apk add openssh-client
     - chmod og=  $PK_KEY
+    - ssh-keyscan $SERVER_IP
     - eval $(ssh-agent -s)
     - cat "${PK_KEY}" |tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
