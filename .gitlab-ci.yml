@@ -6,17 +6,17 @@ variables:
   TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
 
 publish:
-  image: docker:latest
+  image: podman:latest
   stage: publish
   tags:
     - publish
   services:
-    - docker:dind
+    - quay.io/podman/stable
   script:
-    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    - docker push $TAG_COMMIT
-    - docker push $TAG_LATEST
+    - podman build -t $TAG_COMMIT -t $TAG_LATEST .
+    - podman login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - podman  push $TAG_COMMIT
+    - podman push $TAG_LATEST
 
 deploy:
   image: alpine:latest
