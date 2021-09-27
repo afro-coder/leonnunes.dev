@@ -10,8 +10,8 @@ publish:
   stage: publish
   tags:
     - publish
-  services:
-    - docker:dind
+  before_script:
+    - podman info
   script:
     - podman build -t $TAG_COMMIT -t $TAG_LATEST .
     - podman login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
