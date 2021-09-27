@@ -8,6 +8,8 @@ variables:
 publish:
   image: docker:latest
   stage: publish
+  tags:
+    - publish
   services:
     - docker:dind
   script:
