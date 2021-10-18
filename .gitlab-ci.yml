@@ -36,6 +36,6 @@ deploy:
     - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "podman run -d -p 8080:80 --name $WEB_NAME $TAG_COMMIT"
   environment:
     name: production
-    url: https://portfolio.afro-coder.com/
+    url: https://leonnunes.dev/
   only:
     - main
